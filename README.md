@@ -2,7 +2,7 @@
 
 A production-ready fullstack starter project showcasing OpenAI's Agents framework with a real-time streaming UI. Built with Next.js, TypeScript, and WebSockets.
 
-![Screenshot](./screenshoot.png)
+![Screenshot](./screenshot.png)
 
 ## ✨ Features
 
