@@ -12,7 +12,7 @@ import z from 'zod';
 import { aisdk } from '@openai/agents-extensions';
 import { openai } from '@ai-sdk/openai';
 
-const model = aisdk(openai('gpt-4o-mini'));
+const model = aisdk(openai('gpt-4o'));
 
 // ----- Tools -----
 const getWeatherTool = tool({
@@ -103,6 +103,7 @@ type Session = {
   maxTurns: number;
   stateString?: string;
   lastHistory: any[];
+  lastAgent?: Agent;
   runId: number;
 };
 const sessions = new Map<any, Session>();
@@ -243,7 +244,7 @@ async function startRun(session: Session, input: any[] | RunState<any, any>) {
   if (session.closed) return;
   const myRunId = ++session.runId;
 
-  const stream = await session.runner.run(session.agent, input, {
+  const stream = await session.runner.run(session.lastAgent ?? session.agent, input, {
     stream: true,
     maxTurns: session.maxTurns,
   });
@@ -259,6 +260,7 @@ async function startRun(session: Session, input: any[] | RunState<any, any>) {
   if (session.closed || myRunId !== session.runId) return;
 
   session.lastHistory = stream.history ?? session.lastHistory;
+  session.lastAgent = stream.lastAgent;
 
   if (stream.interruptions && stream.interruptions.length > 0) {
     session.stateString = JSON.stringify(stream.state);
