@@ -14,6 +14,10 @@ export const initialRunState: UIRunState = {
 export function reduceEvent(state: UIRunState, incoming: any): UIRunState {
   if (!incoming || typeof incoming !== 'object') return state;
 
+  if (incoming.type === 'reset') {
+    return initialRunState;
+  }
+
   let s: UIRunState = { ...state, raw: [...state.raw, incoming] };
 
   if (incoming.type === 'local_user_message') {

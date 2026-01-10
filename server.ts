@@ -11,6 +11,7 @@ import {
 import z from 'zod';
 import { aisdk } from '@openai/agents-extensions';
 import { openai } from '@ai-sdk/openai';
+import { RoutingAgent } from './agents';
 
 const model = aisdk(openai('gpt-4o'));
 
@@ -153,7 +154,7 @@ wss.on('connection', (ws) => {
           closed: false,
           conversationId,
           runner,
-          agent: generalAgent,
+          agent: RoutingAgent,
           maxTurns: typeof data.maxTurns === 'number' ? data.maxTurns : 10,
           stateString: undefined,
           lastHistory: [],

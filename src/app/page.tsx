@@ -62,6 +62,14 @@ export default function App() {
     ],
   );
 
+  const handleNewChat = useCallback(() => {
+    dispatch({ type: 'reset' });
+    const url = new URL(window.location.href);
+    url.searchParams.delete('conversationId');
+    url.searchParams.delete('chatID');
+    window.history.pushState({}, '', url.toString());
+  }, [dispatch]);
+
   return (
     <div className="h-screen overflow-hidden flex flex-col bg-slate-50">
       <div className="max-w-7xl mx-auto w-full h-full flex flex-col p-4">
@@ -101,11 +109,19 @@ export default function App() {
           </aside>
 
           <main className="flex-1 flex flex-col min-h-0 overflow-hidden bg-white border border-slate-200 rounded-lg shadow-sm">
-            <div className="border-b border-slate-200 px-4 py-3 flex-shrink-0">
-              <h1 className="text-lg font-semibold text-slate-800">Timeline</h1>
-              <p className="text-xs text-slate-500">
-                Real-time agent execution stream
-              </p>
+            <div className="border-b border-slate-200 px-4 py-3 flex-shrink-0 flex items-center justify-between">
+              <div>
+                <h1 className="text-lg font-semibold text-slate-800">Timeline</h1>
+                <p className="text-xs text-slate-500">
+                  Real-time agent execution stream
+                </p>
+              </div>
+              <button
+                onClick={handleNewChat}
+                className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg px-4 py-2 text-sm font-medium transition-colors shadow-sm"
+              >
+                New Chat
+              </button>
             </div>
 
             <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 min-h-0">
